@@ -119,7 +119,7 @@ func (ann *ANN) instanceBackwards(values []float64, costDeltas []float64) (weigh
 	incomingDeltaSum := sum(costDeltas)
 
 	previousLayerDeltas := make([]float64, len(ann.weights[len(ann.weights)-1][0]))
-	for i := 0; i <= len(ann.weights[len(ann.weights)-1]); i++ {
+	for i := 0; i < len(ann.weights[len(ann.weights)-1][0]); i++ {
 		previousLayerDeltas[i] = incomingDeltaSum
 	}
 
@@ -239,12 +239,12 @@ func train(ann *ANN, valueBatch [][]float64, batchTargets [][]float64, epochs in
 
 		ann.update(totalWeightDeltas, totalBiasDeltas, learningRate)
 
-		if epoch%2 == 0 {
+		if epoch%10 == 0 {
 			fmt.Printf("Total loss in epoch %v: %v\n", epoch, epochLoss)
 		}
 
-		if epoch > 20 {
-			learningRate *= 0.5
+		if epoch > 49 {
+			learningRate *= 0.1
 		}
 	}
 
