@@ -2,7 +2,8 @@ package main
 
 func main() {
 	layers := []int{2, 5, 1}
-	activationFunction := ReLU{}
+	activationFunction := Sigmoid{}
+	lossFunction := MSE{}
 
 	network := ANN{}
 	network.init(layers, activationFunction)
@@ -20,5 +21,5 @@ func main() {
 		{0.0},
 	}
 
-	train(&network, x, y, 100)
+	train(&network, x, y, 100, lossFunction)
 }

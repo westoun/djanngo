@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 )
 
@@ -215,7 +214,7 @@ func (ann *ANN) update(weightDeltas [][][]float64, biasDeltas [][]float64, learn
 	}
 }
 
-func train(ann *ANN, valueBatch [][]float64, batchTargets [][]float64, epochs int) {
+func train(ann *ANN, valueBatch [][]float64, batchTargets [][]float64, epochs int, lossFunction LossFunction) {
 	learningRate := 0.1
 
 	for epoch := 1; epoch <= epochs; epoch++ {
@@ -226,16 +225,10 @@ func train(ann *ANN, valueBatch [][]float64, batchTargets [][]float64, epochs in
 
 		batchPredictions := ann.predict(valueBatch)
 		for i, prediction := range batchPredictions {
-			batchCostDeltas[i] = make([]float64, len(prediction))
-
 			target := batchTargets[i]
 
-			for j := 0; j < len(prediction); j++ {
-
-				epochLoss += 0.5 * math.Pow(prediction[j]-target[j], 2)
-				batchCostDeltas[i][j] = prediction[j] - target[j]
-
-			}
+			epochLoss += lossFunction.compute(prediction, target)
+			batchCostDeltas[i] = lossFunction.derive(prediction, target)
 		}
 
 		totalWeightDeltas, totalBiasDeltas := ann.backwards(valueBatch, batchCostDeltas)
