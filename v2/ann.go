@@ -7,13 +7,16 @@ import (
 )
 
 type ANN struct {
-	weights [][][]float64
-	biases  [][]float64
+	weights            [][][]float64
+	biases             [][]float64
+	activationFunction ActivationFunction
 }
 
-func (ann *ANN) init(layers []int) {
+func (ann *ANN) init(layers []int, activationFunction ActivationFunction) {
 	ann.weights = make([][][]float64, len(layers)-1)
 	ann.biases = make([][]float64, len(layers)-1)
+
+	ann.activationFunction = activationFunction
 
 	for i := 1; i < len(layers); i++ {
 		layerWeights := make([][]float64, layers[i])
@@ -80,7 +83,7 @@ func (ann *ANN) instanceForward(values []float64) (zs [][]float64,
 				neuronZ += layerWeights[n][i] * activations[layer][i]
 			}
 
-			neuronActivation := relu(neuronZ)
+			neuronActivation := ann.activationFunction.compute(neuronZ)
 
 			layerZs[n] = neuronZ
 			layerActivations[n] = neuronActivation
@@ -132,7 +135,7 @@ func (ann *ANN) instanceBackwards(values []float64, costDeltas []float64) (weigh
 			weightDeltas[layer][n] = make([]float64, len(ann.weights[layer][n]))
 
 			for w, _ := range neuronWeights {
-				weightDelta := previousLayerDeltas[n] * reluDerivative(
+				weightDelta := previousLayerDeltas[n] * ann.activationFunction.derive(
 					zs[layer][n],
 				) * activations[layer][n]
 
@@ -141,7 +144,7 @@ func (ann *ANN) instanceBackwards(values []float64, costDeltas []float64) (weigh
 		}
 
 		for n, _ := range ann.biases[layer] {
-			biasDelta := previousLayerDeltas[n] * reluDerivative(zs[layer][n])
+			biasDelta := previousLayerDeltas[n] * ann.activationFunction.derive(zs[layer][n])
 
 			biasDeltas[layer][n] = biasDelta
 
