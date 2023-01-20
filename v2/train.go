@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-func train(ann *ANN, valueBatch [][]float64, batchTargets [][]float64, epochs int, lossFunction LossFunction) {
-	learningRate := 0.1
+func train(ann *ANN, valueBatch [][]float64, batchTargets [][]float64, epochs int,
+	lossFunction LossFunction, optimizer Optimizer, lrScheduler LRScheduler) {
 
 	for epoch := 1; epoch <= epochs; epoch++ {
 
@@ -16,19 +16,20 @@ func train(ann *ANN, valueBatch [][]float64, batchTargets [][]float64, epochs in
 			target := batchTargets[i]
 
 			epochLoss += lossFunction.compute(prediction, target)
+
 			batchCostDeltas[i] = lossFunction.derive(prediction, target)
 		}
 
+		batchCostDeltas = optimizer.optimize(batchCostDeltas)
+
 		totalWeightDeltas, totalBiasDeltas := ann.backwards(valueBatch, batchCostDeltas)
+
+		learningRate := lrScheduler.get(epoch, epochLoss)
 
 		ann.update(totalWeightDeltas, totalBiasDeltas, learningRate)
 
-		if epoch%10 == 0 {
+		if epoch%5 == 0 {
 			fmt.Printf("Total loss in epoch %v: %v\n", epoch, epochLoss)
-		}
-
-		if epoch > 49 {
-			learningRate *= 0.1
 		}
 	}
 

@@ -2,8 +2,14 @@ package main
 
 func main() {
 	layers := []int{2, 5, 1}
-	activationFunction := Sigmoid{}
+	activationFunction := ReLU{}
 	lossFunction := MSE{}
+
+	optimizer := MomentumGD{}
+	optimizer.init(0.9)
+
+	scheduler := LossDecreaseScheduler{}
+	scheduler.init(0.01, 0.1, 0)
 
 	network := ANN{}
 	network.init(layers, activationFunction)
@@ -18,8 +24,8 @@ func main() {
 		{1.0},
 		{1.0},
 		{0.0},
-		{0.0},
+		{1.0},
 	}
 
-	train(&network, x, y, 100, lossFunction)
+	train(&network, x, y, 50, lossFunction, &optimizer, &scheduler)
 }
