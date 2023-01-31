@@ -23,7 +23,7 @@ func (ann *ANN) init(layers []int, activationFunction ActivationFunction) {
 
 			neuronWeights := make([]float64, layers[i-1])
 			for k := 0; k < layers[i-1]; k++ {
-				neuronWeights[k] = rand.Float64()
+				neuronWeights[k] = rand.Float64() - 0.5
 			}
 
 			layerWeights[j] = neuronWeights
@@ -36,7 +36,7 @@ func (ann *ANN) init(layers []int, activationFunction ActivationFunction) {
 		layerBiases := make([]float64, layers[i])
 
 		for j := 0; j < layers[i]; j++ {
-			layerBiases[j] = rand.Float64()
+			layerBiases[j] = rand.Float64() - 0.5
 		}
 
 		ann.biases[i-1] = layerBiases
@@ -65,7 +65,7 @@ func (ann *ANN) instanceForward(values []float64) (zs [][]float64,
 	zs = make([][]float64, len(ann.weights))
 	activations = make([][]float64, len(ann.weights))
 
-	activations[0] = values
+	previousActivations := values
 
 	for layer := 0; layer < len(ann.weights); layer++ {
 		layerWeights := ann.weights[layer]
@@ -77,8 +77,8 @@ func (ann *ANN) instanceForward(values []float64) (zs [][]float64,
 		for n := 0; n < len(ann.weights[layer]); n++ {
 			neuronZ := layerBiases[n]
 
-			for i := 0; i < len(activations[layer]); i++ {
-				neuronZ += layerWeights[n][i] * activations[layer][i]
+			for i := 0; i < len(previousActivations); i++ {
+				neuronZ += layerWeights[n][i] * previousActivations[i]
 			}
 
 			neuronActivation := ann.activationFunction.compute(neuronZ)
@@ -89,6 +89,8 @@ func (ann *ANN) instanceForward(values []float64) (zs [][]float64,
 
 		zs[layer] = layerZs
 		activations[layer] = layerActivations
+
+		previousActivations = layerActivations
 	}
 
 	return zs, activations
@@ -108,6 +110,7 @@ func (ann *ANN) predict(valueBatch [][]float64) [][]float64 {
 	for i, _ := range valueBatch {
 		predictions[i] = batchActivations[i][len(batchActivations[i])-1]
 	}
+
 	return predictions
 }
 
