@@ -5,6 +5,7 @@ import (
 	. "djanngo/v3/losses"
 	. "djanngo/v3/networks"
 	. "djanngo/v3/optimizers"
+	. "djanngo/v3/utils"
 	"fmt"
 )
 
@@ -32,7 +33,9 @@ func main() {
 
 	loss := MSELoss{}
 
-	optimizer := SGD{}
+	// optimizer := SGD{}
+	optimizer := Momentum{}
+	optimizer.Init(0.9)
 
 	x := [][]float64{
 		{
@@ -52,7 +55,7 @@ func main() {
 			0.0,
 		},
 	}
-	x = normalize(x)
+	x = Normalize(x)
 
 	y := [][]float64{
 		{
@@ -71,7 +74,7 @@ func main() {
 
 	learningRate := 0.01
 
-	epochs := 1000
+	epochs := 10
 	for epoch := 1; epoch <= epochs; epoch++ {
 		prediction := network.Predict(x)
 
@@ -82,7 +85,7 @@ func main() {
 
 		optimizer.Optimize(network, learningRate)
 
-		if epoch%100 == 0 {
+		if epoch%1 == 0 {
 			fmt.Println("Loss after epoch ", epoch, " : ", currentLoss)
 		}
 	}
