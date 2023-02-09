@@ -2,6 +2,7 @@ package layers
 
 import (
 	. "djanngo/v3/updatables"
+	"fmt"
 	"math/rand"
 )
 
@@ -113,4 +114,13 @@ func (layer *Linear) GetUpdatables() []Updatable {
 		layer.biases,
 	}
 	return updatables
+}
+
+func (layer Linear) String() string {
+	stringified := "Linear Layer:"
+
+	stringified += "\n\tweights: " + fmt.Sprint(layer.weights.Values)
+	stringified += "\n\tbiases: " + fmt.Sprint(layer.biases.Values)
+
+	return stringified
 }

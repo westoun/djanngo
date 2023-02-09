@@ -1,6 +1,8 @@
 package main
 
-import . "djanngo/v3/layers"
+import (
+	. "djanngo/v3/layers"
+)
 
 type Network struct {
 	layers []Layer
@@ -21,4 +23,14 @@ func (network *Network) UpdateGradients(batchLoss [][]float64) {
 	lastLayer := network.layers[layerCount-1]
 
 	lastLayer.Backward(batchLoss)
+}
+
+func (network Network) String() string {
+	stringified := ""
+
+	for _, layer := range network.layers {
+		stringified += "\n" + layer.String() + "\n"
+	}
+
+	return stringified
 }

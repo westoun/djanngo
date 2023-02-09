@@ -8,11 +8,9 @@ import (
 type Sigmoid struct {
 	parents   []Layer
 	lastBatch [][]float64
-	layerSize int
 }
 
-func (layer *Sigmoid) Init(layerSize int, parents []Layer) {
-	layer.layerSize = layerSize
+func (layer *Sigmoid) Init(parents []Layer) {
 	layer.parents = parents
 }
 
@@ -57,6 +55,10 @@ func (layer *Sigmoid) Backward(incomingGradients [][]float64) {
 
 }
 
-func (sigmoid *Sigmoid) GetUpdatables() []Updatable {
+func (layer *Sigmoid) GetUpdatables() []Updatable {
 	return []Updatable{}
+}
+
+func (layer Sigmoid) String() string {
+	return "Sigmoid Activation Layer"
 }

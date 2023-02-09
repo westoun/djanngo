@@ -61,3 +61,7 @@ func (layer *ReLU) Backward(incomingGradients [][]float64) {
 func (layer *ReLU) GetUpdatables() []Updatable {
 	return []Updatable{}
 }
+
+func (layer ReLU) String() string {
+	return "ReLU Activation Layer"
+}
