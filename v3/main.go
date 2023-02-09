@@ -12,13 +12,13 @@ func main() {
 	linear1.Init(2, 2, []Layer{})
 
 	sigmoid1 := &Sigmoid{}
-	sigmoid1.Init(2, []Layer{linear1})
+	sigmoid1.Init([]Layer{linear1})
 
 	linear2 := &Linear{}
 	linear2.Init(2, 1, []Layer{sigmoid1})
 
 	sigmoid2 := &Sigmoid{}
-	sigmoid2.Init(1, []Layer{linear2})
+	sigmoid2.Init([]Layer{linear2})
 
 	network.layers = []Layer{
 		linear1,
@@ -50,6 +50,8 @@ func main() {
 			0.0,
 		},
 	}
+	x = normalize(x)
+
 	y := [][]float64{
 		{
 			1.0,
@@ -81,17 +83,19 @@ func main() {
 		}
 	}
 
-	x = [][]float64{
-		{
-			1.0,
-			0.0,
-		},
-		{
-			1.0,
-			1.0,
-		},
-	}
-	predictions := network.Predict(x)
-	fmt.Println(predictions)
+	fmt.Println(network)
+
+	// x = [][]float64{
+	// 	{
+	// 		1.0,
+	// 		0.0,
+	// 	},
+	// 	{
+	// 		1.0,
+	// 		1.0,
+	// 	},
+	// }
+	// predictions := network.Predict(x)
+	// fmt.Println(predictions)
 
 }
