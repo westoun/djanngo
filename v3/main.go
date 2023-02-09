@@ -35,7 +35,7 @@ func main() {
 
 	// optimizer := SGD{}
 	optimizer := Momentum{}
-	optimizer.Init(0.9)
+	optimizer.Init(0.8)
 
 	x := [][]float64{
 		{
@@ -72,7 +72,7 @@ func main() {
 		},
 	}
 
-	learningRate := 0.01
+	learningRate := 0.05
 
 	epochs := 10
 	for epoch := 1; epoch <= epochs; epoch++ {

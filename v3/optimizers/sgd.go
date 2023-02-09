@@ -14,25 +14,22 @@ func (sgd *SGD) Optimize(network Network, learningRate float64) {
 			updatableVector, isVector := updatable.(UpdatableVector)
 
 			if isVector {
-				// TODO: Move update logic to separate function
-				for g := 0; g < len(updatableVector.Gradients[0]); g++ {
-					updatableVector.Values[g] -= learningRate * updatableVector.Gradients[0][g]
-				}
 
-				updatableVector.ResetGrad()
+				// TODO: Move update logic to separate function
+				for g := 0; g < len(updatableVector.Gradients); g++ {
+					updatableVector.Values[g] -= learningRate * updatableVector.Gradients[g]
+				}
 
 			} else {
 				updatableMatrix := updatable.(UpdatableMatrix)
 
-				for r := 0; r < len(updatableMatrix.Gradients[0]); r++ {
-					for c := 0; c < len(updatableMatrix.Gradients[0][r]); c++ {
+				for r := 0; r < len(updatableMatrix.Gradients); r++ {
+					for c := 0; c < len(updatableMatrix.Gradients[r]); c++ {
 
-						updatableMatrix.Values[r][c] -= learningRate * updatableMatrix.Gradients[0][r][c]
+						updatableMatrix.Values[r][c] -= learningRate * updatableMatrix.Gradients[r][c]
 
 					}
 				}
-
-				updatableMatrix.ResetGrad()
 			}
 
 		}

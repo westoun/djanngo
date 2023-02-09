@@ -76,7 +76,7 @@ func (layer *Linear) Backward(incomingGradients [][]float64) {
 		}
 
 	}
-	layer.weights.Gradients = append(layer.weights.Gradients, weightGradients)
+	layer.weights.Gradients = weightGradients
 
 	// bias gradients
 	biasGradients := make([]float64, len(layer.biases.Values))
@@ -85,7 +85,7 @@ func (layer *Linear) Backward(incomingGradients [][]float64) {
 			biasGradients[j] += incomingGradients[i][j]
 		}
 	}
-	layer.biases.Gradients = append(layer.biases.Gradients, biasGradients)
+	layer.biases.Gradients = biasGradients
 
 	// backpropagate
 	backwardGradients := make([][]float64, len(incomingGradients))
