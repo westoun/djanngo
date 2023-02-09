@@ -8,9 +8,7 @@ import (
 type SGD struct {
 }
 
-func (sgd *SGD) Optimize(network Network) {
-	lr := 0.01
-
+func (sgd *SGD) Optimize(network Network, learningRate float64) {
 	for _, layer := range network.Layers {
 		for _, updatable := range layer.GetUpdatables() {
 			updatableVector, isVector := updatable.(UpdatableVector)
@@ -18,7 +16,7 @@ func (sgd *SGD) Optimize(network Network) {
 			if isVector {
 				// TODO: Move update logic to separate function
 				for g := 0; g < len(updatableVector.Gradients[0]); g++ {
-					updatableVector.Values[g] -= lr * updatableVector.Gradients[0][g]
+					updatableVector.Values[g] -= learningRate * updatableVector.Gradients[0][g]
 				}
 
 				updatableVector.Gradients = make([][]float64, 0)
@@ -29,7 +27,7 @@ func (sgd *SGD) Optimize(network Network) {
 				for r := 0; r < len(updatableMatrix.Gradients[0]); r++ {
 					for c := 0; c < len(updatableMatrix.Gradients[0][r]); c++ {
 
-						updatableMatrix.Values[r][c] -= lr * updatableMatrix.Gradients[0][r][c]
+						updatableMatrix.Values[r][c] -= learningRate * updatableMatrix.Gradients[0][r][c]
 
 					}
 				}

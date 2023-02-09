@@ -5,5 +5,5 @@ import (
 )
 
 type Optimizer interface {
-	Optimize(Network)
+	Optimize(Network, float64)
 }

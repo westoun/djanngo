@@ -69,6 +69,8 @@ func main() {
 		},
 	}
 
+	learningRate := 0.01
+
 	epochs := 1000
 	for epoch := 1; epoch <= epochs; epoch++ {
 		prediction := network.Predict(x)
@@ -78,7 +80,7 @@ func main() {
 
 		network.UpdateGradients(lossGradients)
 
-		optimizer.Optimize(network)
+		optimizer.Optimize(network, learningRate)
 
 		if epoch%100 == 0 {
 			fmt.Println("Loss after epoch ", epoch, " : ", currentLoss)
