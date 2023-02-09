@@ -28,7 +28,6 @@ func main() {
 	}
 
 	loss := MSELoss{}
-	loss.Init(network)
 
 	optimizer := SGD{}
 
@@ -67,7 +66,7 @@ func main() {
 		},
 	}
 
-	epochs := 100
+	epochs := 1000
 	for epoch := 1; epoch <= epochs; epoch++ {
 		prediction := network.Predict(x)
 
@@ -78,24 +77,24 @@ func main() {
 
 		optimizer.Optimize(network)
 
-		if epoch%10 == 0 {
+		if epoch%100 == 0 {
 			fmt.Println("Loss after epoch ", epoch, " : ", currentLoss)
 		}
 	}
 
 	fmt.Println(network)
 
-	// x = [][]float64{
-	// 	{
-	// 		1.0,
-	// 		0.0,
-	// 	},
-	// 	{
-	// 		1.0,
-	// 		1.0,
-	// 	},
-	// }
-	// predictions := network.Predict(x)
-	// fmt.Println(predictions)
+	x = [][]float64{
+		{
+			1.0,
+			0.0,
+		},
+		{
+			1.0,
+			1.0,
+		},
+	}
+	predictions := network.Predict(x)
+	fmt.Println(predictions)
 
 }

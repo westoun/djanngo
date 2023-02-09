@@ -1,7 +1,6 @@
 package main
 
 import (
-	. "djanngo/v3/layers"
 	"math"
 )
 
@@ -12,11 +11,6 @@ type Loss interface {
 }
 
 type MSELoss struct {
-	previousLayer Layer
-}
-
-func (mseloss *MSELoss) Init(network Network) {
-	mseloss.previousLayer = network.layers[len(network.layers)-1]
 }
 
 func (mseloss *MSELoss) ComputeLoss(prediction [][]float64, target [][]float64) float64 {
