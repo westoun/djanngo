@@ -1,16 +1,16 @@
-package main
+package network
 
 import (
 	. "djanngo/v3/layers"
 )
 
 type Network struct {
-	layers []Layer
+	Layers []Layer
 }
 
 func (network *Network) Predict(batch [][]float64) [][]float64 {
 	output := batch
-	for _, layer := range network.layers {
+	for _, layer := range network.Layers {
 		output = layer.Forward(output)
 	}
 
@@ -19,8 +19,8 @@ func (network *Network) Predict(batch [][]float64) [][]float64 {
 
 func (network *Network) UpdateGradients(batchLoss [][]float64) {
 
-	layerCount := len(network.layers)
-	lastLayer := network.layers[layerCount-1]
+	layerCount := len(network.Layers)
+	lastLayer := network.Layers[layerCount-1]
 
 	lastLayer.Backward(batchLoss)
 }
@@ -28,7 +28,7 @@ func (network *Network) UpdateGradients(batchLoss [][]float64) {
 func (network Network) String() string {
 	stringified := ""
 
-	for _, layer := range network.layers {
+	for _, layer := range network.Layers {
 		stringified += "\n" + layer.String() + "\n"
 	}
 

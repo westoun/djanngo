@@ -1,14 +1,8 @@
-package main
+package losses
 
 import (
 	"math"
 )
-
-type Loss interface {
-	Init(Network)
-	ComputeLoss([][]float64, [][]float64) []float64
-	ComputeGradients([][]float64, [][]float64) [][]float64
-}
 
 type MSELoss struct {
 }

@@ -1,18 +1,17 @@
-package main
+package optimizers
 
-import . "djanngo/v3/updatables"
-
-type Optimizer interface {
-	Optimize(Network)
-}
+import (
+	. "djanngo/v3/networks"
+	. "djanngo/v3/updatables"
+)
 
 type SGD struct {
 }
 
 func (sgd *SGD) Optimize(network Network) {
-	lr := 0.05
+	lr := 0.01
 
-	for _, layer := range network.layers {
+	for _, layer := range network.Layers {
 		for _, updatable := range layer.GetUpdatables() {
 			updatableVector, isVector := updatable.(UpdatableVector)
 

@@ -2,6 +2,9 @@ package main
 
 import (
 	. "djanngo/v3/layers"
+	. "djanngo/v3/losses"
+	. "djanngo/v3/networks"
+	. "djanngo/v3/optimizers"
 	"fmt"
 )
 
@@ -20,7 +23,7 @@ func main() {
 	sigmoid2 := &Sigmoid{}
 	sigmoid2.Init([]Layer{linear2})
 
-	network.layers = []Layer{
+	network.Layers = []Layer{
 		linear1,
 		sigmoid1,
 		linear2,
