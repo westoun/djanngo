@@ -34,7 +34,7 @@ func (layer *ReLU) Forward(batch [][]float64) [][]float64 {
 	return output
 }
 
-func (layer *ReLU) Backward(incomingGradients [][]float64) {
+func (layer *ReLU) computeBackwardGradients(incomingGradients [][]float64) [][]float64 {
 	backwardGradients := make([][]float64, len(incomingGradients))
 
 	// assert same length
@@ -52,6 +52,13 @@ func (layer *ReLU) Backward(incomingGradients [][]float64) {
 
 		}
 	}
+
+	return backwardGradients
+}
+
+func (layer *ReLU) Backward(incomingGradients [][]float64) {
+
+	backwardGradients := layer.computeBackwardGradients(incomingGradients)
 
 	for _, parentLayer := range layer.parents {
 		parentLayer.Backward(backwardGradients)

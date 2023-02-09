@@ -13,13 +13,13 @@ func main() {
 	network := Network{}
 
 	linear1 := &Linear{}
-	linear1.Init(2, 2, []Layer{})
+	linear1.Init(2, 10, []Layer{})
 
 	sigmoid1 := &Sigmoid{}
 	sigmoid1.Init([]Layer{linear1})
 
 	linear2 := &Linear{}
-	linear2.Init(2, 1, []Layer{sigmoid1})
+	linear2.Init(10, 1, []Layer{sigmoid1})
 
 	sigmoid2 := &Sigmoid{}
 	sigmoid2.Init([]Layer{linear2})
@@ -33,9 +33,9 @@ func main() {
 
 	loss := MSELoss{}
 
-	// optimizer := SGD{}
-	optimizer := Momentum{}
-	optimizer.Init(0.8)
+	optimizer := SGD{}
+	// optimizer := Momentum{}
+	// optimizer.Init(0.9)
 
 	x := [][]float64{
 		{
@@ -72,9 +72,9 @@ func main() {
 		},
 	}
 
-	learningRate := 0.05
+	learningRate := 1.0
 
-	epochs := 10
+	epochs := 3000
 	for epoch := 1; epoch <= epochs; epoch++ {
 		prediction := network.Predict(x)
 
@@ -85,7 +85,7 @@ func main() {
 
 		optimizer.Optimize(network, learningRate)
 
-		if epoch%1 == 0 {
+		if epoch%100 == 0 {
 			fmt.Println("Loss after epoch ", epoch, " : ", currentLoss)
 		}
 	}

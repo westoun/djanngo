@@ -18,7 +18,6 @@ func (layer *Linear) Init(inSize int, layerSize int, parents []Layer) {
 
 	layer.weights = UpdatableMatrix{}
 	layer.weights.Values = make([][]float64, layerSize)
-	// layer.weights.Gradients = make([][][]float64, 0)
 
 	for l := 0; l < layerSize; l++ {
 		layer.weights.Values[l] = make([]float64, inSize)
@@ -55,9 +54,7 @@ func (layer *Linear) Forward(batch [][]float64) [][]float64 {
 	return output
 }
 
-func (layer *Linear) Backward(incomingGradients [][]float64) {
-
-	// weight gradients
+func (layer *Linear) computeWeightGradients(incomingGradients [][]float64) [][]float64 {
 	weightGradients := make([][]float64, len(layer.weights.Values))
 	for n := 0; n < len(layer.weights.Values); n++ {
 		weightGradients[n] = make([]float64, len(layer.weights.Values[n]))
@@ -76,18 +73,21 @@ func (layer *Linear) Backward(incomingGradients [][]float64) {
 		}
 
 	}
-	layer.weights.Gradients = weightGradients
+	return weightGradients
+}
 
-	// bias gradients
+func (layer *Linear) computeBiasGradients(incomingGradients [][]float64) []float64 {
 	biasGradients := make([]float64, len(layer.biases.Values))
 	for i := 0; i < len(incomingGradients); i++ {
 		for j := 0; j < len(incomingGradients[i]); j++ {
 			biasGradients[j] += incomingGradients[i][j]
 		}
 	}
-	layer.biases.Gradients = biasGradients
 
-	// backpropagate
+	return biasGradients
+}
+
+func (layer *Linear) computeBackwardGradients(incomingGradients [][]float64) [][]float64 {
 	backwardGradients := make([][]float64, len(incomingGradients))
 	for i := 0; i < len(layer.lastBatch); i++ {
 		backwardGradients[i] = make([]float64, len(layer.lastBatch[i]))
@@ -103,6 +103,16 @@ func (layer *Linear) Backward(incomingGradients [][]float64) {
 		}
 	}
 
+	return backwardGradients
+}
+
+func (layer *Linear) Backward(incomingGradients [][]float64) {
+
+	layer.weights.Gradients = layer.computeWeightGradients(incomingGradients)
+
+	layer.biases.Gradients = layer.computeBiasGradients(incomingGradients)
+
+	backwardGradients := layer.computeBackwardGradients(incomingGradients)
 	for _, parentLayer := range layer.parents {
 		parentLayer.Backward(backwardGradients)
 	}
