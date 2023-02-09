@@ -44,7 +44,7 @@ func (momentum *Momentum) Optimize(network Network, learningRate float64) {
 					updatableVector.Values[g] -= learningRate * v[g]
 				}
 
-				updatableVector.Gradients = make([][]float64, 0)
+				updatableVector.ResetGrad()
 
 			} else {
 				updatableMatrix := updatable.(UpdatableMatrix)
@@ -71,7 +71,7 @@ func (momentum *Momentum) Optimize(network Network, learningRate float64) {
 					}
 				}
 
-				updatableMatrix.Gradients = make([][][]float64, 0)
+				updatableMatrix.ResetGrad()
 			}
 
 			updatableIndex++

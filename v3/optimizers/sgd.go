@@ -19,7 +19,7 @@ func (sgd *SGD) Optimize(network Network, learningRate float64) {
 					updatableVector.Values[g] -= learningRate * updatableVector.Gradients[0][g]
 				}
 
-				updatableVector.Gradients = make([][]float64, 0)
+				updatableVector.ResetGrad()
 
 			} else {
 				updatableMatrix := updatable.(UpdatableMatrix)
@@ -32,7 +32,7 @@ func (sgd *SGD) Optimize(network Network, learningRate float64) {
 					}
 				}
 
-				updatableMatrix.Gradients = make([][][]float64, 0)
+				updatableMatrix.ResetGrad()
 			}
 
 		}
