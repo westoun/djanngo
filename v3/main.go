@@ -5,6 +5,7 @@ import (
 	. "djanngo/v3/losses"
 	. "djanngo/v3/networks"
 	. "djanngo/v3/optimizers"
+	. "djanngo/v3/schedulers"
 	. "djanngo/v3/utils"
 	"fmt"
 )
@@ -36,6 +37,9 @@ func main() {
 	optimizer := SGD{}
 	// optimizer := Momentum{}
 	// optimizer.Init(0.9)
+
+	scheduler := ExponentialDecayScheduler{}
+	scheduler.Init(2.0, 0.9, 500)
 
 	x := [][]float64{
 		{
@@ -72,10 +76,10 @@ func main() {
 		},
 	}
 
-	learningRate := 1.0
-
 	epochs := 3000
 	for epoch := 1; epoch <= epochs; epoch++ {
+		learningRate := scheduler.GetLearningRate(epoch)
+
 		prediction := network.Predict(x)
 
 		currentLoss := loss.ComputeLoss(prediction, y)
